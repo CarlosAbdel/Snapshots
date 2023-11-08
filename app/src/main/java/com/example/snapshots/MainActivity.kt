@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(
                     AuthUI.getInstance().createSignInIntentBuilder()
                         .setAvailableProviders(
-                            Arrays.asList(
+                            listOf(
                                 AuthUI.IdpConfig.EmailBuilder().build(),
                                 AuthUI.IdpConfig.GoogleBuilder().build()
                             )
