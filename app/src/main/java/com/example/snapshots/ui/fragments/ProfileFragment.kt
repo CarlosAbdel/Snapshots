@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,17 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.snapshots.R
 import com.example.snapshots.databinding.FragmentProfileBinding
+import com.example.snapshots.utils.FragmentAux
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), FragmentAux {
 
-    private lateinit var mBinding : FragmentProfileBinding
+    private lateinit var mBinding: FragmentProfileBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = FragmentProfileBinding.inflate(inflater, container, false)
         return mBinding.root
     }
@@ -24,21 +27,33 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.tvName.text = FirebaseAuth.getInstance().currentUser?.displayName
-        mBinding.tvEmail.text = FirebaseAuth.getInstance().currentUser?.email
+        refresh()
+        setupBottom()
+    }
 
-        mBinding.btnLogout.setOnClickListener{
+    private fun setupBottom() {
+        mBinding.btnLogout.setOnClickListener {
             singOut()
         }
     }
 
     private fun singOut() {
-        context?.let{
+        context?.let {
             AuthUI.getInstance().signOut(it)
                 .addOnCompleteListener {
                     Toast.makeText(context, "Hasta pronto...", Toast.LENGTH_SHORT).show()
+                    mBinding.tvName.text = ""
+                    mBinding.tvEmail.text = ""
+
+                    (activity?.findViewById(R.id.bottom_nav) as? BottomNavigationView)?.selectedItemId =
+                        R.id.action_home
                 }
         }
+    }
+
+    override fun refresh() {
+        mBinding.tvName.text = FirebaseAuth.getInstance().currentUser?.displayName
+        mBinding.tvEmail.text = FirebaseAuth.getInstance().currentUser?.email
     }
 
 }

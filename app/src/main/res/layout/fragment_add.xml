@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/common_padding_default"
-    tools:context=".AddFragment">
+    tools:context=".ui.fragments.AddFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"
+        style="?android:progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="?android:progressBarStyleHorizontal"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Publicar"
         android:layout_marginTop="@dimen/common_padding_min"
-        app:layout_constraintTop_toBottomOf="@id/progressBar"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:text="@string/post_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBar" />
 
     <TextView
         android:id="@+id/tvMessage"
@@ -32,26 +32,27 @@
         android:layout_height="wrap_content"
         android:text="@string/post_message_title"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btnPost"
         app:layout_constraintEnd_toStartOf="@id/btnPost"
-        app:layout_constraintTop_toTopOf="@id/btnPost"
-        app:layout_constraintBottom_toBottomOf="@id/btnPost"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnPost" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTitle"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Titulo de la Instantania"
         android:layout_marginTop="@dimen/common_padding_min"
+        android:hint="@string/name_of_image"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPost"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPost">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
@@ -59,21 +60,25 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/common_padding_min"
+        android:contentDescription="@string/select_image_description"
         android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="H, 4:3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilTitle"
-        app:layout_constraintDimensionRatio="H, 4:3"/>
+        tools:ignore="VisualLintBounds" />
 
     <ImageButton
         android:id="@+id/btnSelect"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_image_search"
         android:background="?attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="@id/imgPhoto"
+        android:contentDescription="@string/space_image_description"
+        android:src="@drawable/ic_image_search"
+        app:layout_constraintBottom_toBottomOf="@id/imgPhoto"
         app:layout_constraintEnd_toEndOf="@id/imgPhoto"
+        app:layout_constraintStart_toStartOf="@id/imgPhoto"
         app:layout_constraintTop_toTopOf="@id/imgPhoto"
-        app:layout_constraintBottom_toBottomOf="@id/imgPhoto"/>
+        tools:ignore="VisualLintBounds" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,19 @@
 <resources>
     <string name="app_name">Snapshots</string>
-    <string name="home_title">Inicio</string>
-    <string name="home_add">Crear</string>
-    <string name="home_profile">Perfil</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="delete_button_description">Delete button</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="post_message_title">Seleccione una imagen</string>
-    <string name="post_message_valid_title">Por favor, añada un Título</string>
+    <string name="home_add">Create</string>
+    <string name="home_profile">Profile</string>
+    <string name="home_title">Home</string>
+    <string name="logout">Log Out</string>
+    <string name="name_of_image">Snapshot Title</string>
+    <string name="post_image">Post</string>
+    <string name="post_message_title">Select an image</string>
+    <string name="post_message_valid_title">Please add a title</string>
+    <string name="progress_message" translatable="false">%.2f%%</string>
+    <string name="select_image_description">Select image</string>
+    <string name="space_image_description">Image Space</string>
+    <string name="dialog_delete_title">Are you sure?</string>
+    <string name="dialog_delete_confirm">Accept</string>
+    <string name="dialog_delete_cancel">Cancel</string>
 </resources>
