@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), MainAux {
 
     private val authResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == RESULT_OK) {
-            Toast.makeText(this, "Bienvenido...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.welcome), Toast.LENGTH_SHORT).show()
         } else {
             if (IdpResponse.fromResultIntent(it.data) == null)
                 finish()
@@ -47,11 +47,11 @@ class MainActivity : AppCompatActivity(), MainAux {
 
     private fun setupAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance()
-        mAuthListener = FirebaseAuth.AuthStateListener {
-            val user = it.currentUser
-            if (user == null) {
+        mAuthListener = FirebaseAuth.AuthStateListener { it ->
+            if (it.currentUser == null) {
                 authResult.launch(
                     AuthUI.getInstance().createSignInIntentBuilder()
+                        .setIsSmartLockEnabled(false)
                         .setAvailableProviders(
                             listOf(
                                 AuthUI.IdpConfig.EmailBuilder().build(),
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), MainAux {
                         )
                         .build()
                 )
-            }else{
+            } else {
                 SnapshotsApplication.currentUser = it.currentUser!!
 
                 val fragmentProfile = mFragmentManager?.findFragmentByTag(ProfileFragment::class.java.name)

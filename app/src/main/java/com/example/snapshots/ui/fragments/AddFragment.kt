@@ -1,6 +1,7 @@
 package com.example.snapshots.ui.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,14 +9,15 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.snapshots.R
+import com.example.snapshots.SnapshotsApplication
 import com.example.snapshots.SnapshotsApplication.Companion.PATH_SNAPSHOT
 import com.example.snapshots.databinding.FragmentAddBinding
 import com.example.snapshots.entities.Snapshot
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.example.snapshots.utils.MainAux
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -26,6 +28,8 @@ class AddFragment : Fragment() {
     private lateinit var mBinding: FragmentAddBinding
     private lateinit var mSnapshotsStorageRef: StorageReference
     private lateinit var mSnapshotsDatabaseRef: DatabaseReference
+
+    private var mainAux: MainAux? = null
 
     private var mPhotoSelectedUri: Uri? = null
 
@@ -58,9 +62,15 @@ class AddFragment : Fragment() {
 
     private fun setupButtons() {
         with(mBinding) {
-            btnPost.setOnClickListener { postSnapshot() }
+            btnPost.setOnClickListener { postSnapshot()
+                hideKeyboard() }
             btnSelect.setOnClickListener { openGallery() }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainAux = activity as MainAux
     }
 
     private fun setupFirebase() {
@@ -76,10 +86,10 @@ class AddFragment : Fragment() {
     private fun postSnapshot() {
         mBinding.progressBar.visibility = View.VISIBLE
         val key = mSnapshotsDatabaseRef.push().key!!
-        val storeReference = mSnapshotsStorageRef.child(PATH_SNAPSHOT)
-            .child(FirebaseAuth.getInstance().currentUser!!.uid).child(key)
+        val myStoreRef = mSnapshotsStorageRef.child(SnapshotsApplication.currentUser.uid).child(key)
         if (mPhotoSelectedUri != null) {
-            storeReference.putFile(mPhotoSelectedUri!!)
+            enableUI(false)
+            myStoreRef.putFile(mPhotoSelectedUri!!)
                 .addOnProgressListener {
                     val progress = (100 * it.bytesTransferred / it.totalByteCount).toDouble()
                     mBinding.progressBar.progress = progress.toInt()
@@ -89,20 +99,14 @@ class AddFragment : Fragment() {
                     mBinding.progressBar.visibility = View.INVISIBLE
                 }
                 .addOnSuccessListener { it ->
-                    Snackbar.make(mBinding.root, "Instantanea Publicada", Snackbar.LENGTH_SHORT)
-                        .show()
-                    it.storage.downloadUrl.addOnSuccessListener {
+                     it.storage.downloadUrl.addOnSuccessListener {
                         saveSnapshot(key, it.toString(), mBinding.etTitle.text.toString().trim())
                         mBinding.tilTitle.visibility = View.GONE
                         mBinding.tvMessage.text = getString(R.string.post_message_title)
                     }
                 }
                 .addOnFailureListener {
-                    Snackbar.make(
-                        mBinding.root,
-                        "No se pudo subir, intente más tarde.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    mainAux?.showMessage(R.string.post_message_post_snapshot_fail)
                 }
         }
     }
@@ -110,6 +114,33 @@ class AddFragment : Fragment() {
     private fun saveSnapshot(key: String, url: String, title: String) {
         val snapshot = Snapshot(title = title, photoUrl = url)
         mSnapshotsDatabaseRef.child(key).setValue(snapshot)
+            .addOnSuccessListener {
+
+                mainAux?.showMessage(R.string.post_message_post_success)
+
+                with(mBinding) {
+                    tilTitle.visibility = View.GONE
+                    etTitle.setText("")
+                    tilTitle.error = null
+                    tvMessage.text = getString(R.string.post_message_title)
+                    imgPhoto.setImageDrawable(null)
+                }
+            }
+            .addOnCompleteListener { enableUI(true) }
+            .addOnFailureListener { mainAux?.showMessage(R.string.post_message_post_snapshot_fail) }
+    }
+
+    private fun hideKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    private fun enableUI(enable: Boolean) {
+        with(mBinding) {
+            btnSelect.isEnabled = enable
+            btnPost.isEnabled = enable
+            tilTitle.isEnabled = enable
+        }
     }
 
 }

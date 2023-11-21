@@ -16,4 +16,8 @@
     <string name="dialog_delete_title">Are you sure?</string>
     <string name="dialog_delete_confirm">Accept</string>
     <string name="dialog_delete_cancel">Cancel</string>
+    <string name="home_delete_photo_error">Does not own this photo</string>
+    <string name="post_message_post_success">Photo posted successfully</string>
+    <string name="post_message_post_snapshot_fail">An error occurred while uploading the photo</string>
+    <string name="welcome">Welcome...</string>
 </resources>

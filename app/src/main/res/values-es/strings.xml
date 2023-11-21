@@ -16,4 +16,8 @@
     <string name="dialog_delete_title">¿Estás seguro?</string>
     <string name="dialog_delete_confirm">Aceptar</string>
     <string name="dialog_delete_cancel">Cancelar</string>
+    <string name="home_delete_photo_error">No es propietario de esta foto</string>
+    <string name="post_message_post_success">Foto publicada correctamente</string>
+    <string name="post_message_post_snapshot_fail">Ocurrio un error al subir la foto</string>
+    <string name="welcome">Bienvenido!</string>
 </resources>
