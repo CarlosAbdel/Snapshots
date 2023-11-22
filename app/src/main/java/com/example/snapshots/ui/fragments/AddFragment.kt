@@ -112,7 +112,7 @@ class AddFragment : Fragment() {
     }
 
     private fun saveSnapshot(key: String, url: String, title: String) {
-        val snapshot = Snapshot(title = title, photoUrl = url)
+        val snapshot = Snapshot(ownerUid = SnapshotsApplication.currentUser.uid, title = title, photoUrl = url)
         mSnapshotsDatabaseRef.child(key).setValue(snapshot)
             .addOnSuccessListener {
 

@@ -84,6 +84,11 @@ class HomeFragment : Fragment(), FragmentAux {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .centerCrop()
                             .into(imgPhoto)
+                        btnDelete.visibility= if (model.ownerUid == SnapshotsApplication.currentUser.uid){
+                            View.VISIBLE
+                        } else {
+                            View.INVISIBLE
+                        }
                     }
                 }
             }

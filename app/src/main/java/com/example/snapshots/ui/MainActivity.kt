@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), MainAux {
                         )
                         .build()
                 )
+                mFragmentManager = null
             } else {
                 SnapshotsApplication.currentUser = it.currentUser!!
 
